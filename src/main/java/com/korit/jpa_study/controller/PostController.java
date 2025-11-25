@@ -87,4 +87,9 @@ public class PostController {
         return ResponseEntity.ok(postService.removePost(postId));
     }
 
+    @GetMapping("/userid")
+    public ResponseEntity getPostListByUserId(@RequestParam Integer userId) {
+        return ResponseEntity.ok(postService.getPostListByUserId(userId));
+    }
+
 }

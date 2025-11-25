@@ -5,10 +5,6 @@ import com.korit.jpa_study.dto.ApiRespDto;
 import com.korit.jpa_study.dto.EditPostReqDto;
 import com.korit.jpa_study.entity.Post;
 import com.korit.jpa_study.repository.PostRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.EntityTransaction;
-import jakarta.persistence.Persistence;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,6 +23,10 @@ public class PostService {
         }
         Post result = postRepository.save(addPostReqDto.toEntity());
         return new ApiRespDto<>("success","추가에 성공하였습니다.", result);
+    }
+
+    public ApiRespDto<?> getPostListByUserId(Integer userId) {
+        return new ApiRespDto<>("success", "조회에 성공하였습니다.", postRepository.findAllByUserId(userId));
     }
 
     public ApiRespDto<?> getAll() {
