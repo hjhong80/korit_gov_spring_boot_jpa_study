@@ -4,7 +4,9 @@ import com.korit.jpa_study.dto.AddPostReqDto;
 import com.korit.jpa_study.dto.ApiRespDto;
 import com.korit.jpa_study.dto.EditPostReqDto;
 import com.korit.jpa_study.entity.Post;
+import com.korit.jpa_study.entity.User;
 import com.korit.jpa_study.repository.PostRepository;
+import com.korit.jpa_study.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +17,19 @@ import java.util.Optional;
 public class PostService {
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     public ApiRespDto<?> addPost(AddPostReqDto addPostReqDto) {
+        Optional<User> foundUser = userRepository.findById(addPostReqDto.getUserId());
+        if(foundUser.isEmpty()) {
+            return new ApiRespDto<>("failed","회원정보가 없습니다.", null);
+        }
         Optional<Post> foundPost = postRepository.findByTitle(addPostReqDto.getTitle());
         if(foundPost.isPresent()) {
             return new ApiRespDto<>("success","동일한 제목이 존재합니다.", foundPost.get());
         }
+
         Post result = postRepository.save(addPostReqDto.toEntity());
         return new ApiRespDto<>("success","추가에 성공하였습니다.", result);
     }
