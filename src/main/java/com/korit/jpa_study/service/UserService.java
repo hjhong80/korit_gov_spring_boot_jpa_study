@@ -23,7 +23,7 @@ public class UserService {
         Optional<User> foundUser = userRepository.findByUsername(addUserReqDto.getUsername());
         if (foundUser.isPresent()) {
             System.out.println(">>>>> 추가 : 이름 중복 <<<<<");
-            return new ApiRespDto<>("failed", "username 또는 password를 확인하세요",addUserReqDto);
+            return new ApiRespDto<>("failed", "중복된 username 입니다.",addUserReqDto.getUsername());
         }
         userRepository.save(addUserReqDto.toEntity());
         return new ApiRespDto<>("success","가입을 환영합니다.",addUserReqDto.getUsername() + " 님");
@@ -39,7 +39,7 @@ public class UserService {
     }
 
     public ApiRespDto<?> getUserByUserId(Integer userId) {
-        Optional<User> foundUser = userRepository.findByUserId(userId);
+        Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isEmpty()) {
             System.out.println(">>>>> 단건검색 : userId 없음 <<<<<");
             return new ApiRespDto<>("failed", "존재하지 않는 userId 입니다.",userId);
@@ -57,7 +57,7 @@ public class UserService {
     }
 
     public ApiRespDto<?> editUsername (EditUsernameDto editUsernameDto) {
-        Optional<User> foundUser = userRepository.findByUserId(editUsernameDto.getUserId());
+        Optional<User> foundUser = userRepository.findById(editUsernameDto.getUserId());
         if (foundUser.isEmpty()) {
             System.out.println(">>>>> 수정 : userId 없음 <<<<<");
             return new ApiRespDto<>("failed", "존재하지 않는 userId 입니다.",editUsernameDto.getUserId());
@@ -70,7 +70,7 @@ public class UserService {
     }
 
     public ApiRespDto<?> editPassword (EditPasswordDto editPasswordDto) {
-        Optional<User> foundUser = userRepository.findByUserId(editPasswordDto.getUserId());
+        Optional<User> foundUser = userRepository.findById(editPasswordDto.getUserId());
         if (foundUser.isEmpty()) {
             System.out.println(">>>>> 수정 : userId 없음 <<<<<");
             return new ApiRespDto<>("failed", "존재하지 않는 userId 입니다.",editPasswordDto.getUserId());
@@ -83,7 +83,7 @@ public class UserService {
     }
 
     public ApiRespDto<?> removeUser(Integer userId) {
-        Optional<User> foundUser = userRepository.findByUserId(userId);
+        Optional<User> foundUser = userRepository.findById(userId);
         if (foundUser.isEmpty()) {
             System.out.println(">>>>> 탈퇴 : userId 없음 <<<<<");
             return new ApiRespDto<>("failed", "존재하지 않는 userId 입니다.",userId);
